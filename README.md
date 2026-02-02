@@ -1,36 +1,55 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Luxe Admin Dashboard
 
-## Getting Started
+![Luxe Admin Banner](./public/assets/banner.png)
 
-First, run the development server:
+A professional, high-end admin dashboard built with **Next.js 15**, **Tailwind CSS**, and **Shadcn/UI**. This project features a sophisticated "Midnight Luxe" aesthetic, combining deep dark tones with gold accents and cinematic glassmorphism.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## ✨ Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **📊 Advanced Analytics**: Real-time sales telemetry and interactive data visualizations.
+- **🚀 Seamless Navigation**: fully interactive sidebar with collapsible sub-menus and SPA-style routing.
+- **🔍 Global Command Palette**: Instant access to any page or action via `Cmd+K`.
+- **📦 Inventory Management**: Specialized screens for Products, Categories, and Stock monitoring.
+- **👥 Customer Management**: Searchable, stateful customer directory with functional CRUD interactions.
+- **🔔 Notification Center**: Real-time toast notifications and integrated alert history.
+- **👤 User Profiles**: Dynamic profile management with glassmorphism UI components.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🛠️ Tech Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Framework**: [Next.js 15 (App Router)](https://nextjs.org/)
+- **Styling**: [Tailwind CSS 4](https://tailwindcss.com/)
+- **Components**: [Shadcn UI](https://ui.shadcn.com/)
+- **Icons**: [Lucide React](https://lucide.dev/)
+- **Animation**: [Framer Motion](https://www.framer.com/motion/) & Tailwind Transitions
+- **State Management**: React Context API
 
-## Learn More
+## 🚀 Getting Started
 
-To learn more about Next.js, take a look at the following resources:
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/ahmed9088/luxe-store-admin-dashboard-using-next.js.git
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+3. **Run the development server**:
+   ```bash
+   npm run dev
+   ```
 
-## Deploy on Vercel
+4. **Open in browser**:
+   Navigate to [http://localhost:3000](http://localhost:3000)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🎨 Design Philosophy
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Luxe Admin follows a **premium-first** design approach. Every interaction is designed to feel cinematic and high-end, utilizing:
+- **Glassmorphism**: Subtle backdrops and translucent borders.
+- **Micro-animations**: Transition-based feedback for all interactive elements.
+- **Hierarchy**: Clear typography and visual weight to guide the user's attention.
+
+---
+
+Built with ❤️ by [Ahmed Saffar](https://github.com/ahmed9088)
