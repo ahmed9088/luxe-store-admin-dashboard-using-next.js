@@ -1,7 +1,10 @@
 "use client"
 
+import * as React from "react"
 import { Button } from "@/components/ui/button"
 import { Layers, Plus } from "lucide-react"
+
+const categories = ['Apparel', 'Electronics', 'Accessories', 'Home', 'Office']
 
 export default function CategoriesPage() {
     return (
@@ -17,7 +20,7 @@ export default function CategoriesPage() {
                 </Button>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {['Apparel', 'Electronics', 'Accessories', 'Home', 'Office'].map(cat => (
+                {categories.map((cat) => (
                     <div key={cat} className="p-6 rounded-xl border bg-white/50 dark:bg-black/50 group hover:border-primary/50 transition-colors">
                         <div className="flex items-center justify-between mb-2">
                             <h3 className="font-semibold">{cat}</h3>

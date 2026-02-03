@@ -22,6 +22,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { useSearchParams, useRouter } from "next/navigation"
+import * as React from "react"
 import { Suspense } from "react"
 import {
   CalendarIcon,
@@ -34,7 +35,23 @@ import {
   CreditCard,
   Activity,
   TrendingUp,
+  PieChart as PieChartIcon,
 } from "lucide-react"
+import { motion, AnimatePresence } from "framer-motion"
+import {
+  Area,
+  AreaChart,
+  Bar,
+  BarChart,
+  CartesianGrid,
+  PieChart,
+  Pie,
+  Cell,
+  ResponsiveContainer,
+  Tooltip as RechartsTooltip,
+  XAxis,
+  YAxis,
+} from "recharts"
 
 export default function Home() {
   return (
@@ -74,13 +91,19 @@ function DashboardContent() {
         </div>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, staggerChildren: 0.1 }}
+        className="grid gap-4 md:grid-cols-2 lg:grid-cols-4"
+      >
         <StatsCard
           title="Total Revenue"
           value="$45,231.89"
           description="+20.1% from last month"
           icon={<DollarSign className="h-4 w-4" />}
           trend="up"
+          index={0}
         />
         <StatsCard
           title="Subscriptions"
@@ -88,6 +111,7 @@ function DashboardContent() {
           description="+180.1% from last month"
           icon={<Users className="h-4 w-4" />}
           trend="up"
+          index={1}
         />
         <StatsCard
           title="Sales"
@@ -95,6 +119,7 @@ function DashboardContent() {
           description="+19% from last month"
           icon={<CreditCard className="h-4 w-4" />}
           trend="up"
+          index={2}
         />
         <StatsCard
           title="Active Now"
@@ -102,8 +127,9 @@ function DashboardContent() {
           description="+201 since last hour"
           icon={<Activity className="h-4 w-4" />}
           trend="down"
+          index={3}
         />
-      </div>
+      </motion.div>
 
       <Tabs
         value={currentTab}
@@ -149,27 +175,50 @@ function DashboardContent() {
 
               <Card className="shadow-none border-none bg-white/50 dark:bg-black/50 backdrop-blur-sm">
                 <CardHeader>
+                  <CardTitle className="text-base font-semibold">Category Sales</CardTitle>
+                  <CardDescription>Distribution by department</CardDescription>
+                </CardHeader>
+                <CardContent className="h-[250px] pb-4">
+                  <CategoryDistribution />
+                </CardContent>
+              </Card>
+
+              <Card className="shadow-none border-none bg-white/50 dark:bg-black/50 backdrop-blur-sm">
+                <CardHeader>
                   <CardTitle className="text-base font-semibold">Goal Progress</CardTitle>
                   <CardDescription>Target vs Actual</CardDescription>
                 </CardHeader>
                 <CardContent className="flex flex-col items-center justify-center pt-2">
-                  <div className="relative h-32 w-32 mb-4">
+                  <div className="relative h-28 w-28 mb-4">
                     <svg className="h-full w-full" viewBox="0 0 100 100">
                       <circle className="text-muted stroke-current" strokeWidth="8" fill="transparent" cx="50" cy="50" r="40" />
-                      <circle className="text-primary stroke-current" strokeWidth="8" strokeDasharray="251.2" strokeDashoffset="75.36" strokeLinecap="round" fill="transparent" cx="50" cy="50" r="40" transform="rotate(-90 50 50)" />
+                      <motion.circle
+                        initial={{ strokeDashoffset: 251.2 }}
+                        animate={{ strokeDashoffset: 75.36 }}
+                        transition={{ duration: 1.5, ease: "easeOut" }}
+                        className="text-primary stroke-current"
+                        strokeWidth="8"
+                        strokeDasharray="251.2"
+                        strokeLinecap="round"
+                        fill="transparent"
+                        cx="50"
+                        cy="50"
+                        r="40"
+                        transform="rotate(-90 50 50)"
+                      />
                     </svg>
                     <div className="absolute inset-0 flex flex-col items-center justify-center">
-                      <span className="text-2xl font-bold">70%</span>
+                      <span className="text-xl font-bold">70%</span>
                     </div>
                   </div>
                   <div className="w-full space-y-2">
-                    <div className="flex justify-between text-xs">
+                    <div className="flex justify-between text-[10px]">
                       <span className="text-muted-foreground">Actual Revenue</span>
-                      <span className="font-bold">$70,000</span>
+                      <span className="font-bold">$70k</span>
                     </div>
-                    <div className="flex justify-between text-xs">
+                    <div className="flex justify-between text-[10px]">
                       <span className="text-muted-foreground">Monthly Goal</span>
-                      <span className="font-bold">$100,000</span>
+                      <span className="font-bold">$100k</span>
                     </div>
                   </div>
                 </CardContent>
@@ -177,30 +226,24 @@ function DashboardContent() {
             </div>
           </div>
         </TabsContent>
-        <TabsContent value="analytics" className="space-y-4">
+        <TabsContent value="analytics" className="space-y-4 pt-4 outline-none">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-            <Card className="col-span-4 shadow-none border-none bg-white/50 dark:bg-black/50 backdrop-blur-sm">
+            <Card className="lg:col-span-4 glass border-white/20 dark:border-white/10 shadow-xl overflow-hidden">
               <CardHeader>
-                <CardTitle>Customer Growth</CardTitle>
-                <CardDescription>Monthly active users vs new signups</CardDescription>
+                <CardTitle className="text-xl font-bold">User Growth</CardTitle>
+                <CardDescription>New signups vs active users (L6M)</CardDescription>
               </CardHeader>
-              <CardContent className="h-[300px] flex items-center justify-center border-t border-dashed mt-4">
-                <div className="text-muted-foreground flex flex-col items-center gap-2">
-                  <Activity className="h-8 w-8 opacity-20" />
-                  <span>Interactive Growth Chart</span>
-                </div>
+              <CardContent className="h-[350px]">
+                <UserGrowthChart />
               </CardContent>
             </Card>
-            <Card className="col-span-3 shadow-none border-none bg-white/50 dark:bg-black/50 backdrop-blur-sm">
+            <Card className="lg:col-span-3 glass border-white/20 dark:border-white/10 shadow-xl overflow-hidden">
               <CardHeader>
-                <CardTitle>Geographic Distribution</CardTitle>
-                <CardDescription>Sales by region</CardDescription>
+                <CardTitle className="text-xl font-bold">Regional Sales</CardTitle>
+                <CardDescription>Top performing territories</CardDescription>
               </CardHeader>
-              <CardContent className="h-[300px] flex items-center justify-center border-t border-dashed mt-4">
-                <div className="text-muted-foreground flex flex-col items-center gap-2">
-                  <Users className="h-8 w-8 opacity-20" />
-                  <span>Regional Sales Heatmap</span>
-                </div>
+              <CardContent className="h-[350px]">
+                <RegionalHeatmap />
               </CardContent>
             </Card>
           </div>
@@ -218,27 +261,79 @@ function DashboardContent() {
   )
 }
 
-function StatsCard({ title, value, description, icon, trend }: { title: string, value: string, description: string, icon: React.ReactNode, trend: 'up' | 'down' }) {
+function StatsCard({ title, value, description, icon, trend, index }: { title: string, value: string, description: string, icon: React.ReactNode, trend: 'up' | 'down', index: number }) {
   return (
-    <Card className="shadow-none border-none bg-white/50 dark:bg-black/50 backdrop-blur-sm">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium">{title}</CardTitle>
-        <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-          {icon}
+    <motion.div
+      whileHover={{ y: -5, scale: 1.02 }}
+      transition={{ type: "spring", stiffness: 300 }}
+    >
+      <Card className="shadow-none border-none bg-white/50 dark:bg-black/50 backdrop-blur-sm h-full overflow-hidden relative group">
+        <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+          {React.cloneElement(icon as any, { className: "h-24 w-24 -mr-8 -mt-8" })}
         </div>
-      </CardHeader>
-      <CardContent>
-        <div className="text-2xl font-bold">{value}</div>
-        <div className="flex items-center gap-1 mt-1">
-          {trend === 'up' ? (
-            <ArrowUpRight className="h-4 w-4 text-emerald-500" />
-          ) : (
-            <ArrowDownRight className="h-4 w-4 text-rose-500" />
-          )}
-          <p className="text-xs text-muted-foreground">{description}</p>
-        </div>
-      </CardContent>
-    </Card>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className="text-sm font-medium">{title}</CardTitle>
+          <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-primary relative z-10">
+            {icon}
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="text-2xl font-bold">{value}</div>
+          <div className="flex items-center gap-1 mt-1">
+            {trend === 'up' ? (
+              <ArrowUpRight className="h-4 w-4 text-emerald-500" />
+            ) : (
+              <ArrowDownRight className="h-4 w-4 text-rose-500" />
+            )}
+            <p className="text-xs text-muted-foreground">{description}</p>
+          </div>
+        </CardContent>
+      </Card>
+    </motion.div>
+  )
+}
+
+function CategoryDistribution() {
+  const data = [
+    { name: "Apparel", value: 400 },
+    { name: "Electronics", value: 300 },
+    { name: "Home", value: 300 },
+    { name: "Others", value: 200 },
+  ]
+
+  const COLORS = ["oklch(0.646 0.222 41.116)", "oklch(0.6 0.118 184.704)", "oklch(0.398 0.07 227.392)", "oklch(0.828 0.189 84.429)"]
+
+  return (
+    <ResponsiveContainer width="100%" height="100%">
+      <PieChart>
+        <Pie
+          data={data}
+          cx="50%"
+          cy="50%"
+          innerRadius={60}
+          outerRadius={80}
+          paddingAngle={5}
+          dataKey="value"
+        >
+          {data.map((entry, index) => (
+            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+          ))}
+        </Pie>
+        <RechartsTooltip
+          content={({ active, payload }) => {
+            if (active && payload && payload.length) {
+              return (
+                <div className="bg-background/80 backdrop-blur-md border border-border p-2 rounded-lg shadow-xl text-[10px]">
+                  <p className="font-bold">{payload[0].name}</p>
+                  <p className="text-muted-foreground">{payload[0].value} Sales</p>
+                </div>
+              )
+            }
+            return null
+          }}
+        />
+      </PieChart>
+    </ResponsiveContainer>
   )
 }
 
@@ -259,5 +354,89 @@ function ReportCard({ title, date, type }: { title: string, date: string, type: 
         </div>
       </CardContent>
     </Card>
+  )
+}
+
+function UserGrowthChart() {
+  const data = [
+    { month: "Jan", users: 1200, signups: 400 },
+    { month: "Feb", users: 2100, signups: 700 },
+    { month: "Mar", users: 1800, signups: 500 },
+    { month: "Apr", users: 2400, signups: 900 },
+    { month: "May", users: 2800, signups: 1100 },
+    { month: "Jun", users: 3200, signups: 1300 },
+  ]
+
+  return (
+    <ResponsiveContainer width="100%" height="100%">
+      <AreaChart data={data}>
+        <defs>
+          <linearGradient id="userGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="5%" stopColor="oklch(0.646 0.222 41.116)" stopOpacity={0.3} />
+            <stop offset="95%" stopColor="oklch(0.646 0.222 41.116)" stopOpacity={0} />
+          </linearGradient>
+          <linearGradient id="signupGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="5%" stopColor="oklch(0.6 0.118 184.704)" stopOpacity={0.3} />
+            <stop offset="95%" stopColor="oklch(0.6 0.118 184.704)" stopOpacity={0} />
+          </linearGradient>
+        </defs>
+        <CartesianGrid vertical={false} strokeDasharray="3 3" opacity={0.1} />
+        <XAxis dataKey="month" tickLine={false} axisLine={false} fontSize={12} tickMargin={8} />
+        <YAxis tickLine={false} axisLine={false} fontSize={12} />
+        <RechartsTooltip
+          content={({ active, payload }) => {
+            if (active && payload && payload.length) {
+              return (
+                <div className="bg-background/80 backdrop-blur-md border border-border p-3 rounded-xl shadow-2xl text-xs space-y-1">
+                  <p className="font-bold border-b pb-1 mb-1">{payload[0].payload.month}</p>
+                  <p className="text-emerald-500 flex justify-between gap-4">Active Users: <span className="font-mono">{payload[0].value}</span></p>
+                  <p className="text-primary flex justify-between gap-4">New Signups: <span className="font-mono">{payload[1].value}</span></p>
+                </div>
+              )
+            }
+            return null
+          }}
+        />
+        <Area type="monotone" dataKey="users" stroke="oklch(0.646 0.222 41.116)" fill="url(#userGrad)" strokeWidth={2} />
+        <Area type="monotone" dataKey="signups" stroke="oklch(0.6 0.118 184.704)" fill="url(#signupGrad)" strokeWidth={2} />
+      </AreaChart>
+    </ResponsiveContainer>
+  )
+}
+
+function RegionalHeatmap() {
+  const data = [
+    { region: "North Am.", sales: 4500 },
+    { region: "Europe", sales: 3200 },
+    { region: "Asia", sales: 2800 },
+    { region: "Others", sales: 1200 },
+  ]
+
+  return (
+    <ResponsiveContainer width="100%" height="100%">
+      <BarChart data={data} layout="vertical">
+        <CartesianGrid horizontal={false} strokeDasharray="3 3" opacity={0.1} />
+        <XAxis type="number" hide />
+        <YAxis dataKey="region" type="category" tickLine={false} axisLine={false} fontSize={12} width={80} />
+        <RechartsTooltip
+          cursor={{ fill: 'transparent' }}
+          content={({ active, payload }) => {
+            if (active && payload && payload.length) {
+              return (
+                <div className="bg-background/80 backdrop-blur-md border border-border p-2 rounded-lg shadow-xl text-xs">
+                  <p className="font-bold">{payload[0].value} Sales</p>
+                </div>
+              )
+            }
+            return null
+          }}
+        />
+        <Bar dataKey="sales" fill="oklch(0.205 0 0)" radius={[0, 4, 4, 0]} barSize={20}>
+          {data.map((entry, index) => (
+            <Cell key={`cell-${index}`} fill={`oklch(0.205 0 0 / ${1 - index * 0.2})`} />
+          ))}
+        </Bar>
+      </BarChart>
+    </ResponsiveContainer>
   )
 }

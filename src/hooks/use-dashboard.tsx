@@ -27,6 +27,8 @@ interface DashboardContextType {
 
 const DashboardContext = React.createContext<DashboardContextType | undefined>(undefined)
 
+import { toast } from "sonner"
+
 export function DashboardProvider({ children }: { children: React.ReactNode }) {
     const [user, setUser] = React.useState<User>({
         name: "Ahmed Saffar",
@@ -49,7 +51,39 @@ export function DashboardProvider({ children }: { children: React.ReactNode }) {
     const addNotification = (n: Omit<Notification, "id" | "unread">) => {
         const newN = { ...n, id: Math.random().toString(36).substr(2, 9), unread: true }
         setNotifications(prev => [newN, ...prev])
+
+        toast.info(n.title, {
+            description: n.description,
+            action: {
+                label: "View",
+                onClick: () => console.log("View notification"),
+            },
+        })
     }
+
+    // Simulate real-time notifications
+    React.useEffect(() => {
+        const timer = setTimeout(() => {
+            addNotification({
+                title: "Inventory Alert",
+                description: "Midnight Silk Dress is running low on stock.",
+                time: "Just now"
+            })
+        }, 10000)
+
+        const timer2 = setTimeout(() => {
+            addNotification({
+                title: "New Customer",
+                description: "Sophia Loren just joined the store.",
+                time: "Just now"
+            })
+        }, 25000)
+
+        return () => {
+            clearTimeout(timer)
+            clearTimeout(timer2)
+        }
+    }, [])
 
     return (
         <DashboardContext.Provider value={{ user, setUser, notifications, unreadCount, markAsRead, addNotification }}>
