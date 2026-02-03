@@ -26,6 +26,9 @@ import {
     CreditCard,
     Sparkles,
     BadgeCheck,
+    Activity,
+    Shield,
+    Terminal,
 } from "lucide-react"
 
 import {
@@ -188,6 +191,27 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                     </SidebarMenu>
                 </SidebarGroup>
                 <SidebarGroup className="mt-auto">
+                    <SidebarGroupLabel>System Monitoring</SidebarGroupLabel>
+                    <SidebarMenu>
+                        <SidebarMenuItem>
+                            <SidebarMenuButton size="sm" className="group/health">
+                                <Shield className="text-emerald-500" />
+                                <span>Security: Active</span>
+                            </SidebarMenuButton>
+                        </SidebarMenuItem>
+                        <SidebarMenuItem>
+                            <SidebarMenuButton size="sm">
+                                <Terminal className="text-primary" />
+                                <span>System Health</span>
+                                <div className="ml-auto flex items-center gap-1">
+                                    <div className="h-1 w-4 rounded-full bg-emerald-500" />
+                                    <div className="h-1 w-2 rounded-full bg-emerald-500/50" />
+                                </div>
+                            </SidebarMenuButton>
+                        </SidebarMenuItem>
+                    </SidebarMenu>
+                </SidebarGroup>
+                <SidebarGroup>
                     <SidebarGroupLabel>Help & Support</SidebarGroupLabel>
                     <SidebarMenu>
                         <SidebarMenuItem>

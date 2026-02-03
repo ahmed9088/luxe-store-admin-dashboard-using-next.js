@@ -26,6 +26,7 @@ import {
     ArrowUpDown,
     CheckCircle2,
     Package,
+    Sparkles,
 } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 
@@ -117,6 +118,10 @@ export default function StockPage() {
                             <ArrowUpDown className="mr-2 h-4 w-4" />
                             Sort
                         </Button>
+                        <Button size="sm" className="bg-primary/20 text-primary border-primary/20 hover:bg-primary/30">
+                            <Sparkles className="mr-2 h-3 w-3" />
+                            Smart Sync
+                        </Button>
                     </div>
                 </div>
 
@@ -128,6 +133,7 @@ export default function StockPage() {
                                 <TableHead>Product Name</TableHead>
                                 <TableHead>Category</TableHead>
                                 <TableHead className="text-right">Stock Level</TableHead>
+                                <TableHead className="text-center">Restock Score</TableHead>
                                 <TableHead>Status</TableHead>
                                 <TableHead className="text-right">Action</TableHead>
                             </TableRow>
@@ -154,6 +160,17 @@ export default function StockPage() {
                                                     {item.stock} units
                                                 </span>
                                                 <span className="text-[10px] text-muted-foreground">Min: {item.threshold}</span>
+                                            </div>
+                                        </TableCell>
+                                        <TableCell className="text-center">
+                                            <div className="flex items-center justify-center">
+                                                <div className="w-12 h-1.5 rounded-full bg-muted overflow-hidden">
+                                                    <motion.div
+                                                        initial={{ width: 0 }}
+                                                        animate={{ width: `${Math.min(100, (item.threshold / (item.stock || 1)) * 100)}%` }}
+                                                        className={`h-full ${item.stock <= item.threshold ? "bg-rose-500" : "bg-emerald-500"}`}
+                                                    />
+                                                </div>
                                             </div>
                                         </TableCell>
                                         <TableCell>

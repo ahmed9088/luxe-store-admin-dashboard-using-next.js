@@ -2,6 +2,7 @@
 
 import { DashboardCharts } from "@/components/dashboard-charts"
 import { LiveSalesFeed } from "@/components/live-sales-feed"
+import { AIIntelligence, LiveSalesTicker } from "@/components/intelligence"
 import {
   Card,
   CardContent,
@@ -36,6 +37,7 @@ import {
   Activity,
   TrendingUp,
   PieChart as PieChartIcon,
+  Sparkles,
 } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import {
@@ -141,6 +143,10 @@ function DashboardContent() {
           <TabsTrigger value="analytics">Analytics</TabsTrigger>
           <TabsTrigger value="reports">Reports</TabsTrigger>
           <TabsTrigger value="notifications">Notifications</TabsTrigger>
+          <TabsTrigger value="intelligence" className="text-primary font-bold">
+            <Sparkles className="mr-2 h-3 w-3" />
+            AI Insights
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="overview" className="space-y-4 pt-4 outline-none">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
@@ -223,6 +229,21 @@ function DashboardContent() {
                   </div>
                 </CardContent>
               </Card>
+            </div>
+          </div>
+        </TabsContent>
+        <TabsContent value="intelligence" className="space-y-4 pt-4 outline-none">
+          <AIIntelligence />
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+            <Card className="lg:col-span-4 glass border-white/10 h-[400px] flex items-center justify-center">
+              <div className="text-center space-y-2">
+                <TrendingUp className="h-12 w-12 text-primary mx-auto opacity-20" />
+                <h3 className="font-bold text-lg">Predictive Sales Model v4.2</h3>
+                <p className="text-xs text-muted-foreground">Neural network is processing 12,402 data points...</p>
+              </div>
+            </Card>
+            <div className="lg:col-span-3">
+              <LiveSalesTicker />
             </div>
           </div>
         </TabsContent>
@@ -359,12 +380,14 @@ function ReportCard({ title, date, type }: { title: string, date: string, type: 
 
 function UserGrowthChart() {
   const data = [
-    { month: "Jan", users: 1200, signups: 400 },
-    { month: "Feb", users: 2100, signups: 700 },
-    { month: "Mar", users: 1800, signups: 500 },
-    { month: "Apr", users: 2400, signups: 900 },
-    { month: "May", users: 2800, signups: 1100 },
-    { month: "Jun", users: 3200, signups: 1300 },
+    { month: "Jan", users: 1200, signups: 400, forecast: 1200 },
+    { month: "Feb", users: 2100, signups: 700, forecast: 2100 },
+    { month: "Mar", users: 1800, signups: 500, forecast: 1800 },
+    { month: "Apr", users: 2400, signups: 900, forecast: 2400 },
+    { month: "May", users: 2800, signups: 1100, forecast: 2800 },
+    { month: "Jun", users: 3200, signups: 1300, forecast: 3200 },
+    { month: "Jul", forecast: 3800 },
+    { month: "Aug", forecast: 4200 },
   ]
 
   return (
@@ -399,6 +422,7 @@ function UserGrowthChart() {
         />
         <Area type="monotone" dataKey="users" stroke="oklch(0.646 0.222 41.116)" fill="url(#userGrad)" strokeWidth={2} />
         <Area type="monotone" dataKey="signups" stroke="oklch(0.6 0.118 184.704)" fill="url(#signupGrad)" strokeWidth={2} />
+        <Area type="monotone" dataKey="forecast" stroke="oklch(0.646 0.222 41.116)" strokeDasharray="5 5" fill="transparent" strokeWidth={1} />
       </AreaChart>
     </ResponsiveContainer>
   )
